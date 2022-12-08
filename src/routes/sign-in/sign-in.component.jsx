@@ -9,7 +9,7 @@ function SignIn() {
     console.log("user =>", user);
 
     const userDocRef = await createUserDocumentFromAuth(user);
-    console.log("userDocRef in sign-in component =>", userDocRef);
+    console.log("userDocRef in logGoogleUser =>", userDocRef);
   };
 
   return (
