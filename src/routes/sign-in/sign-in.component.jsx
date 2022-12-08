@@ -1,26 +1,26 @@
-import { useEffect } from "react";
-import { getRedirectResult } from "firebase/auth";
+// import { useEffect } from "react";
+// import { getRedirectResult } from "firebase/auth";
 
 import {
-  auth,
+  //   auth,
   signInWithGooglePopup,
   signInWithGoogleRedirect,
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
 
 function SignIn() {
-  useEffect(() => {
-    async function fetchRedirectResult() {
-      const response = await getRedirectResult(auth);
-      console.log("response in fetchRedirectResult =>", response);
+  //   useEffect(() => {
+  //     async function fetchRedirectResult() {
+  //       const response = await getRedirectResult(auth);
+  //       console.log("response in fetchRedirectResult =>", response);
 
-      if (response) {
-        const userDocRef = await createUserDocumentFromAuth(response.user);
-        console.log("userDocRef in fetchRedirectResult =>", userDocRef);
-      }
-    }
-    fetchRedirectResult();
-  }, []);
+  //       if (response) {
+  //         const userDocRef = await createUserDocumentFromAuth(response.user);
+  //         console.log("userDocRef in fetchRedirectResult =>", userDocRef);
+  //       }
+  //     }
+  //     fetchRedirectResult();
+  //   }, []);
 
   const logGoogleUser = async () => {
     const { user } = await signInWithGooglePopup();
