@@ -8,10 +8,10 @@ import SignUpForm from "../../components/sign-up-form/sign-up-form.component";
 function SignIn() {
   const logGoogleUser = async () => {
     const { user } = await signInWithGooglePopup();
-    console.log("user =>", user);
+    // console.log("user =>", user);
 
     const userDocRef = await createUserDocumentFromAuth(user);
-    console.log("userDocRef in logGoogleUser =>", userDocRef);
+    // console.log("userDocRef in logGoogleUser =>", userDocRef);
   };
 
   return (
