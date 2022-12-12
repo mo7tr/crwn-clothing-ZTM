@@ -38,7 +38,6 @@ function SignUpForm() {
         email,
         password
       );
-      console.log("user =>", user);
 
       await createUserDocumentFromAuth(user, {
         displayName,

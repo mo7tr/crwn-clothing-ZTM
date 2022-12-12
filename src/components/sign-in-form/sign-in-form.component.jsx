@@ -33,8 +33,8 @@ function SignInForm() {
     e.preventDefault();
 
     try {
-      const response = await signInAuthWithEmailAndPassword(email, password);
-      console.log("response =>", response);
+      const { user } = await signInAuthWithEmailAndPassword(email, password);
+      console.log("user =>", user);
 
       resetFormField();
     } catch (error) {
@@ -52,9 +52,9 @@ function SignInForm() {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
+
   return (
     <div className="sign-in-container">
       <h2>Already have an account?</h2>
