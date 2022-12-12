@@ -60,7 +60,9 @@ function SignInForm() {
   const signInWithGoogle = async () => {
     const { user } = await signInWithGooglePopup();
     await createUserDocumentFromAuth(user);
+    setCurrentUser(user);
   };
+
   return (
     <div className="sign-in-container">
       <h2>Already have an account?</h2>
