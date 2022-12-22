@@ -5,8 +5,6 @@ import ProductCard from "../../components/product-card/product-card.component";
 
 import "./shop.styles.scss";
 
-// import SHOP_DATA from "../../shop-data.json";
-
 function Shop() {
   const { products } = useContext(ProductContext);
   console.log("currentProducts in shop component =>", products);
