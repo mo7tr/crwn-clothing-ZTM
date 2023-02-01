@@ -114,7 +114,7 @@ export function* onSignUpSuccess() {
 }
 
 export function* onSignOutStart() {
-  yield call(signOut);
+  yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
 }
 
 export function* userSaga() {
