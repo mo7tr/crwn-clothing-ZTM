@@ -13,6 +13,7 @@ function PaymentForm() {
     e.preventDefault();
 
     if (!stripe || !elements) {
+      console.log(0);
       return;
     }
 
@@ -22,11 +23,33 @@ function PaymentForm() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ amount: 10000 }), // = 100$
-    }).then((res) => {
-      res.json();
+    }).then((res) => res.json());
+
+    // const clientSecret = response.paymentIntent.client_secret;
+    const {
+      paymentIntent: { client_secret },
+    } = response;
+
+    console.log("client_secret =>", client_secret);
+
+    const paymentResult = await stripe.confirmCardPayment(client_secret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: "Joe as a test",
+        },
+      },
     });
 
-    console.log("response =>", response);
+    console.log("paymentResult =>", paymentResult);
+
+    if (paymentResult.error) {
+      alert(paymentResult.error);
+    } else {
+      if (paymentResult.paymentIntent.status === "succeeded") {
+        alert("Payment Successful");
+      }
+    }
   };
 
   return (
