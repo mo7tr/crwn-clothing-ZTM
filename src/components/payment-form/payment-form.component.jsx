@@ -45,8 +45,6 @@ function PaymentForm() {
       paymentIntent: { client_secret },
     } = response;
 
-    console.log("client_secret =>", client_secret);
-
     const paymentResult = await stripe.confirmCardPayment(client_secret, {
       payment_method: {
         card: elements.getElement(CardElement),
@@ -56,12 +54,10 @@ function PaymentForm() {
       },
     });
 
-    console.log("paymentResult =>", paymentResult);
-
     setIsProcessingPayment(false);
 
     if (paymentResult.error) {
-      alert(paymentResult.error);
+      alert(paymentResult.error.message);
     } else {
       if (paymentResult.paymentIntent.status === "succeeded") {
         alert("Payment Successful");
