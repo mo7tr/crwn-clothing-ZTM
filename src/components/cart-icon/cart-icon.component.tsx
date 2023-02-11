@@ -9,11 +9,7 @@ import {
 
 import { setIsCartOpen } from "../../store/cart/cart.action";
 
-import {
-  CartIconContainer,
-  ShoppingIcon,
-  ItemCount,
-} from "./cart-icon.styles.jsx";
+import { CartIconContainer, ShoppingIcon, ItemCount } from "./cart-icon.styles";
 
 function CartIcon() {
   const dispatch = useDispatch();
