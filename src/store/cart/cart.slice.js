@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addCartItem, removeCartItem, clearCartItem } from "./cart.action";
+import {
+  addCartItem,
+  removeCartItem,
+  clearCartItem,
+} from "./cart.actionHelper";
 
 const initialState = {
   isCartOpen: false,
