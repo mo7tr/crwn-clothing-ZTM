@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   addItemToCart,
@@ -6,16 +6,12 @@ import {
   removeItemFromCart,
 } from "../../store/cart/cart.slice";
 
-import { selectCartItems } from "../../store/cart/cart.selector";
-
 import "./checkout-item.styles.scss";
 
 function CheckoutItem({ cartItem }) {
   const { name, imageUrl, price, quantity } = cartItem;
 
   const dispatch = useDispatch();
-
-  const cartItems = useSelector(selectCartItems);
 
   const clearItemHandler = () => dispatch(clearItemFromCart(cartItem));
 

@@ -9,19 +9,24 @@ import user from "./user/user.slice";
 import cart from "./cart/cart.slice";
 import categories from "./categories/categories.slice";
 
+const middleWares = [process.env.NODE_ENV === "development" && logger].filter(
+  Boolean
+);
+
 const reducers = combineReducers({ user, cart, categories });
 
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["cart"],
-  blacklist: ["user"],
+  // blacklist: ["user"],
 };
 
 export const store = configureStore({
   reducer: persistReducer(persistConfig, reducers),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(logger),
+    getDefaultMiddleware({ serializableCheck: false }).concat(middleWares),
+  devTools: process.env.NODE_ENV !== "production",
 });
 
 export const persistor = persistStore(store);
