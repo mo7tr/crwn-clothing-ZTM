@@ -7,7 +7,12 @@ export const selectCurrentUser = createSelector(
   (userSlice) => userSlice.value
 );
 
-export const selectUserIsLoading = createSelector(
+export const selectUserIsLoadingSignUp = createSelector(
   selectUserReducer,
-  (userSlice) => userSlice.isLoading
+  (userSlice) => userSlice.isLoadingSignUp
+);
+
+export const selectUserIsLoadingSignIn = createSelector(
+  selectUserReducer,
+  (userSlice) => userSlice.isLoadingSignIn
 );

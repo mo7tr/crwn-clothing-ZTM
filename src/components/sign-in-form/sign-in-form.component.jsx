@@ -10,7 +10,7 @@ import {
   signInAuthWithEmailAndPasswordAction,
 } from "../../store/user/user.slice";
 
-import { selectUserIsLoading } from "../../store/user/user.selector";
+import { selectUserIsLoadingSignIn } from "../../store/user/user.selector";
 
 import "./sign-in-form.styles.scss";
 
@@ -21,7 +21,7 @@ const defaultFormFields = {
 
 function SignInForm() {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectUserIsLoading);
+  const isLoading = useSelector(selectUserIsLoadingSignIn);
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;

@@ -1,8 +1,10 @@
 import { createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils";
 
-export const authenticationHelper = async (userAuth) => {
-  const userSnapshot = await createUserDocumentFromAuth(userAuth);
-  console.log("userSnapshot.data() =>", userSnapshot.data());
+export const authenticationHelper = async (userAuth, additionalParamaters) => {
+  const userSnapshot = await createUserDocumentFromAuth(
+    userAuth,
+    additionalParamaters
+  );
 
   return { id: userSnapshot.id, ...userSnapshot.data() };
 };

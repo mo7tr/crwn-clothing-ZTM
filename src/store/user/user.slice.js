@@ -4,84 +4,92 @@ import {
   signInWithGooglePopup,
   signInAuthWithEmailAndPassword,
   getCurrentUser,
+  createAuthUserWithEmailAndPassword,
+  signOutUser,
 } from "../../utils/firebase/firebase.utils";
 
 import { authenticationHelper } from "./user.actionHelper";
 
 const initialState = {
   value: null,
-  isLoading: false,
+  isLoadingSignIn: false,
+  isLoadingSignUp: false,
   error: null,
 };
 
-// const unsubscribe = onAuthStateChangedListener((user) => {
-//   if (user) {
-//     createUserDocumentFromAuth(user);
-//   }
-//   const pickedUser =
-//     user && (({ accessToken, email }) => ({ accessToken, email }))(user);
-
-//   console.log("pickedUser", pickedUser);
-//   return pickedUser;
-// });
-
-// export const getSnapshotFromUserAuth = createAsyncThunk(
-//   "user/getSnapshotFromUserAuth",
-//   async (userAuth, additionalDetails) => {
-//     try {
-//       const userSnapshot = await createUserDocumentFromAuth(
-//         userAuth,
-//         additionalDetails
-//       );
-//     } catch (error) {}
-//   }
-// );
-
 export const isUserAuthenticated = createAsyncThunk(
   "user/isUserAuthenticated",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const userAuth = await getCurrentUser();
-
       if (!userAuth) {
         console.log("!userAuth");
         return;
       }
-
       return authenticationHelper(userAuth);
     } catch (error) {
-      console.log("isUserAuthenticated error: ", error);
-      return error;
+      alert(error);
+
+      return rejectWithValue(error);
     }
   }
 );
 
 export const signInWithGooglePopupAction = createAsyncThunk(
   "user/signInWithGooglePopup",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const { user } = await signInWithGooglePopup();
 
       return await authenticationHelper(user);
     } catch (error) {
-      console.log("signInWithGoogle error: ", error);
-      return error;
+      alert(error);
+      return rejectWithValue(error);
     }
   }
 );
 
 export const signInAuthWithEmailAndPasswordAction = createAsyncThunk(
   "user/signInAuthWithEmailAndPassword",
-  async ({ email, password }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      console.log(33);
-
       const { user } = await signInAuthWithEmailAndPassword(email, password);
 
       return await authenticationHelper(user);
     } catch (error) {
-      console.log("signInWithEmailAndPassowrd error: ", error);
-      return error;
+      alert(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const signUpAuthWithEmailAndPasswordAction = createAsyncThunk(
+  "user/signUpAuthWithEmailAndPassword",
+  async ({ email, password, displayName }, { rejectWithValue }) => {
+    try {
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      return await authenticationHelper(user, { displayName });
+    } catch (error) {
+      alert(error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const signOutUserAction = createAsyncThunk(
+  "user/signOut",
+  async (_, { rejectWithValue }) => {
+    try {
+      await signOutUser();
+
+      return null;
+    } catch (error) {
+      alert(error);
+      return rejectWithValue(error);
     }
   }
 );
@@ -92,45 +100,68 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: {
     [isUserAuthenticated.pending]: (state) => {
-      state.isLoading = true;
+      console.log("isUserAuthenticated? pending");
     },
 
     [isUserAuthenticated.fulfilled]: (state, action) => {
-      console.log("action.payload =>", action.payload);
       state.value = action.payload;
-      state.isLoading = false;
     },
     [isUserAuthenticated.rejected]: (state, action) => {
-      console.log("action.payload =>", action.payload);
       state.error = action.payload;
-      state.isLoading = false;
     },
 
     [signInWithGooglePopupAction.pending]: (state) => {
-      state.isLoading = true;
+      state.isLoadingSignIn = true;
     },
 
     [signInWithGooglePopupAction.fulfilled]: (state, action) => {
-      state.isLoading = false;
+      state.isLoadingSignIn = false;
       state.value = action.payload;
     },
 
     [signInWithGooglePopupAction.rejected]: (state, action) => {
-      state.isLoading = false;
+      state.isLoadingSignIn = false;
       state.error = action.payload;
     },
 
     [signInAuthWithEmailAndPasswordAction.pending]: (state) => {
-      state.isLoading = true;
+      state.isLoadingSignIn = true;
     },
 
     [signInAuthWithEmailAndPasswordAction.fulfilled]: (state, action) => {
-      state.isLoading = false;
+      state.isLoadingSignIn = false;
       state.value = action.payload;
     },
 
     [signInAuthWithEmailAndPasswordAction.rejected]: (state, action) => {
-      state.isLoading = false;
+      state.isLoadingSignIn = false;
+      state.error = action.payload;
+    },
+
+    [signUpAuthWithEmailAndPasswordAction.pending]: (state) => {
+      state.isLoadingSignUp = true;
+    },
+
+    [signUpAuthWithEmailAndPasswordAction.fulfilled]: (state, action) => {
+      state.isLoadingSignUp = false;
+      state.value = action.payload;
+    },
+
+    [signUpAuthWithEmailAndPasswordAction.rejected]: (state, action) => {
+      state.isLoadingSignUp = false;
+      state.error = action.payload;
+    },
+
+    [signOutUserAction.pending]: () => {
+      console.log("signing out processing");
+    },
+
+    [signOutUserAction.fulfilled]: (state, action) => {
+      console.log("fulfilled");
+      state.value = action.payload;
+    },
+
+    [signOutUserAction.rejected]: (state, action) => {
       state.error = action.payload;
     },
   },
