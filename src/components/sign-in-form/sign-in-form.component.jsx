@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
+import Spinner from "../spinner/spinner.component";
 
 import {
-  signInWithGooglePopup,
-  signInAuthWithEmailAndPassword,
-} from "../../utils/firebase/firebase.utils";
+  signInWithGooglePopupAction,
+  signInAuthWithEmailAndPasswordAction,
+} from "../../store/user/user.slice";
+
+import { selectUserIsLoading } from "../../store/user/user.selector";
 
 import "./sign-in-form.styles.scss";
 
@@ -16,6 +20,9 @@ const defaultFormFields = {
 };
 
 function SignInForm() {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectUserIsLoading);
+
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
@@ -30,11 +37,11 @@ function SignInForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(1);
     try {
-      const { user } = await signInAuthWithEmailAndPassword(email, password);
-      console.log("user =>", user);
+      dispatch(signInAuthWithEmailAndPasswordAction({ email, password }));
 
+      console.log(2);
       resetFormField();
     } catch (error) {
       switch (error.code) {
@@ -50,44 +57,49 @@ function SignInForm() {
     }
   };
 
-  const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+  const signInWithGoogle = () => {
+    dispatch(signInWithGooglePopupAction());
   };
 
   return (
     <div className="sign-in-container">
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          label="Email"
-          type="email"
-          required
-          onChange={handleChange}
-          name="email"
-          value={email}
-        />
 
-        <FormInput
-          label="Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="password"
-          value={password}
-        />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            label="Email"
+            type="email"
+            required
+            onChange={handleChange}
+            name="email"
+            value={email}
+          />
 
-        <div className="buttons-container">
-          <Button type="submit">Sign In</Button>
-          <Button
-            type="button"
-            buttonType={BUTTON_TYPE_CLASSES.google}
-            onClick={signInWithGoogle}
-          >
-            Google Sign In
-          </Button>
-        </div>
-      </form>
+          <FormInput
+            label="Password"
+            type="password"
+            required
+            onChange={handleChange}
+            name="password"
+            value={password}
+          />
+
+          <div className="buttons-container">
+            <Button type="submit">Sign In</Button>
+            <Button
+              type="button"
+              buttonType={BUTTON_TYPE_CLASSES.google}
+              onClick={signInWithGoogle}
+            >
+              Google Sign In
+            </Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
