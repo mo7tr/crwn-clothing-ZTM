@@ -1,12 +1,11 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpAuthWithEmailAndPasswordAction } from "../../store/user/user.slice";
+import { selectUserIsLoadingSignUp } from "../../store/user/user.selector";
 
 import FormInput from "../form-input/form-input.component";
 import Button from "../button/button.component";
-
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
+import Spinner from "../spinner/spinner.component";
 
 import "./sign-up-form.styles.scss";
 
@@ -18,6 +17,9 @@ const defaultFormFields = {
 };
 
 function SignUpForm() {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectUserIsLoadingSignUp);
+
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
@@ -34,14 +36,9 @@ function SignUpForm() {
     }
 
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
-        email,
-        password
+      dispatch(
+        signUpAuthWithEmailAndPasswordAction({ email, password, displayName })
       );
-
-      await createUserDocumentFromAuth(user, {
-        displayName,
-      });
 
       resetFormField();
     } catch (error) {
@@ -62,44 +59,49 @@ function SignUpForm() {
     <div className="sign-up-container">
       <h2>Don't have an account?</h2>
       <span>Sign up with your email and password</span>
-      <form onSubmit={handleSubmit}>
-        <FormInput
-          label="Display Name"
-          type="text"
-          required
-          onChange={handleChange}
-          name="displayName"
-          value={displayName}
-        />
 
-        <FormInput
-          label="Email"
-          type="email"
-          required
-          onChange={handleChange}
-          name="email"
-          value={email}
-        />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            label="Display Name"
+            type="text"
+            required
+            onChange={handleChange}
+            name="displayName"
+            value={displayName}
+          />
 
-        <FormInput
-          label="Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="password"
-          value={password}
-        />
+          <FormInput
+            label="Email"
+            type="email"
+            required
+            onChange={handleChange}
+            name="email"
+            value={email}
+          />
 
-        <FormInput
-          label="Confirm Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="confirmPassword"
-          value={confirmPassword}
-        />
-        <Button type="submit">Sign Up</Button>
-      </form>
+          <FormInput
+            label="Password"
+            type="password"
+            required
+            onChange={handleChange}
+            name="password"
+            value={password}
+          />
+
+          <FormInput
+            label="Confirm Password"
+            type="password"
+            required
+            onChange={handleChange}
+            name="confirmPassword"
+            value={confirmPassword}
+          />
+          <Button type="submit">Sign Up</Button>
+        </form>
+      )}
     </div>
   );
 }
