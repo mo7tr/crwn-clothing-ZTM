@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 
@@ -24,7 +24,6 @@ const GET_CATEGORY = gql`
 
 const Category = () => {
   const { category } = useParams();
-  // const { categoriesMap, loading } = useContext(CategoriesContext);
 
   const { loading, error, data } = useQuery(GET_CATEGORY, {
     variables: {
