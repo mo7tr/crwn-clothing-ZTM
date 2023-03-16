@@ -25,13 +25,16 @@ import {
 
 import { Category } from "../../store/categories/categories.types";
 
+const apiKey = process.env.REACT_APP_FIREBASE_APIKEY;
+const firebaseApiId = process.env.REACT_APP_FIREBASE_APIID;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDUYTZOD3_AoS4PozJz5pRo2F569SUgvgo",
+  apiKey,
   authDomain: "crwn-clothing-db-e29ff.firebaseapp.com",
   projectId: "crwn-clothing-db-e29ff",
   storageBucket: "crwn-clothing-db-e29ff.appspot.com",
   messagingSenderId: "773673657393",
-  appId: "1:773673657393:web:5298bc51f67eae99082110",
+  appId: firebaseApiId,
 };
 
 // Initialize Firebase
