@@ -32,7 +32,6 @@ function PaymentForm() {
     e.preventDefault();
 
     if (!stripe || !elements) {
-      console.log(0);
       return;
     }
 
